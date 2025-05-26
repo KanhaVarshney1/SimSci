@@ -1,10 +1,10 @@
 ## Introduction
 
 
-<b>Discipline | <b>Fill your discipline name here
+<b>Discipline | <b>Electronics
 :--|:--|
-<b> Lab | <b> Fill your lab name here
-<b> Experiment|     <b> Fill your experiment name and number here
+<b> Lab | <b> network analysis and synthesis 
+<b> Experiment|     <b>  Verification of Thevenin’s Theorem and Maximum power transfer theorem.
 
 ### About the Experiment 
 
