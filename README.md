@@ -21,6 +21,6 @@ Fill a brief description of this experiment here
 SrNo | Name | Faculty or Student | Department| Institute | Email id
 :--|:--|:--|:--|:--|:--|
 1 | Kanha varshney | Student  | Electronics engineering| Rajkiya engineering college kannauj | kanhavarshney483@gmail.com
-2 | Utkarsh Yadav  | Student | Electrical engineering | Rajkiya engineering college kannauj | utkarshyadav@gmail.com
+2 | Utkarsh Yadav  | Student | Electrical engineering | Rajkiya engineering college kannauj | utkarshyadav705@gmail.com
 3 | Katyayni priya | student | Electrical engineering | Rajkiya engineering college kannauj | katyaynijk0109@gmail.com
 4 | Sakshi shukla | student | Electrical engineering | Rajkiya engineering college kannauj | angelsakshi5678@gmail.com
