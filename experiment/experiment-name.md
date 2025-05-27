@@ -1,2 +1,1 @@
-## Experiment name
- Verification of Thevenin’s Theorem and Maximum power transfer theorem. 
+##  Verification of Thevenin’s Theorem and Maximum power transfer theorem. 
