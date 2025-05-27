@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification of Thevenin's Theorem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #e6f0fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .instructions {
+            width: 40%;
+            background-color: #d6e6ff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .instructions h2, .instructions h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .instructions p.procedure-text {
+            text-align: justify;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        .instructions p.case-item {
+            text-align: justify;
+            line-height: 1.5;
+            margin: 5px 0;
+        }
+        .circuit-panel {
+            width: 55%;
+            text-align: center;
+            position: relative;
+        }
+        .circuit-image {
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid #000;
+            border-radius: 5px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+        .tab {
+            background-color: #4682b4;
+            color: white;
+            padding: 8px 15px;
+            border: 1px solid #000;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab.active {
+            background-color: #87ceeb;
+            color: black;
+        }
+        .meters {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .meter-box {
+            background-color: #f9f9f9;
+            border: 1px solid #000;
+            padding: 10px;
+            border-radius: 5px;
+            width: 45%;
+            text-align: center;
+        }
+        .meter-box h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .meter-box canvas {
+            margin: 0 auto;
+            display: block;
+        }
+        .meter-box p {
+            margin: 5px 0 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .controls label {
+            display: inline-block;
+            width: 100px;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .controls select, .controls input {
+            margin-right: 20px;
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        .controls .input-row {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .simulate-btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .simulate-btn {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .simulate-btn:hover {
+            background-color: #e60000;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .observation-section {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #e6f0fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .observation-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+        .observation-table th, .observation-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            text-decoration: underline;
+        }
+        .observation-table th {
+            background-color: #808080;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Instructions Panel -->
+        <div class="instructions">
+            <h2>Verification of Thevenin's Theorem</h2>
+            <h3>PROCEDURE:</h3>
+            <p class="procedure-text">Keep all the resistances (R1, R2, R3, RL) close to their respective maximum values. Choose any arbitrary values of V1 and V2.</p>
+            
+            <h3>EXPERIMENT PART:</h3>
+            <p class="case-item"><b>Case 1:</b> Switch S1 to Power and S2 to load. Simulate the program. Observe the result from Table 1.</p>
+            <p class="case-item"><b>Case 2:</b></p>
+            <p class="case-item"><b>a) Thevenin Voltage Analysis:</b><br>Apply switch S1 to power and S2 to intermediate. Simulate the program. Read Thevenin voltage (Vth) from Case 2(a) tab.</p>
+            <p class="case-item"><b>b) Thevenin Resistance Analysis:</b><br>Apply switch S1 to short and S2 to power. Simulate the program. Read Thevenin resistance (Rth) from Case 2(b) tab.</p>
+            <p class="case-item"><b>Case 3: <span style="font-weight: bold;">Using Vth and Rth, determine Load Current:</span></b><br>Specify the load resistance in case of the same load resistance entered in the main circuit. Simulate the program. Read Load current (IL) from Case 3 tab. Compare the load currents (IL) obtained above cases.</p>
+            
+            <p><b style="font-weight: bold;">MC</b> - Moving Coil<br><b style="font-weight: bold;">DPDT</b> - Double pole Double throw<br><b>Note</b> - All the resistances are in ohms.</p>
+        </div>
+
+        <!-- Circuit Panel -->
+        <div class="circuit-panel">
+            <img src="circuit_diagram.png" alt="Circuit Diagram" class="circuit-image">
+            
+            <!-- Tabs for Cases -->
+            <div class="tabs">
+                <div class="tab" id="tab-case1" onclick="selectCase('case1')">Case 1</div>
+                <div class="tab" id="tab-case2a" onclick="selectCase('case2a')">Case 2(a)</div>
+                <div class="tab" id="tab-case2b" onclick="selectCase('case2b')">Case 2(b)</div>
+                <div class="tab" id="tab-case3" onclick="selectCase('case3')">Case 3</div>
+            </div>
+
+            <!-- Ammeter and Voltmeter Readings -->
+            <div class="meters">
+                <div class="meter-box">
+                    <h4>Ammeter (MC 0-3A)</h4>
+                    <canvas id="ammeter" data-type="radial-gauge"
+                        data-width="200" data-height="200"
+                        data-units="Amps" data-title="Ammeter"
+                        data-min-value="0" data-max-value="5"
+                        data-major-ticks="0,1,2,3,4,5"
+                        data-minor-ticks="5"
+                        data-stroke-ticks="true"
+                        data-highlights='[{"from": 3, "to": 5, "color": "rgba(255, 0, 0, .3)"}]'
+                        data-color-plate="#fff"
+                        data-color-major-ticks="#000"
+                        data-color-minor-ticks="#000"
+                        data-color-title="#000"
+                        data-color-units="#000"
+                        data-color-numbers="#000"
+                        data-color-needle-start="rgba(255,0,0,1)"
+                        data-color-needle-end="rgba(255,0,0,1)"
+                        data-value="0"
+                    ></canvas>
+                    <p id="ammeter-reading">0 A</p>
+                </div>
+                <div class="meter-box">
+                    <h4>Voltmeter (MC 0-200V)</h4>
+                    <canvas id="voltmeter" data-type="radial-gauge"
+                        data-width="200" data-height="200"
+                        data-units="Volts" data-title="Voltmeter"
+                        data-min-value="0" data-max-value="250"
+                        data-major-ticks="0,50,100,150,200,250"
+                        data-minor-ticks="5"
+                        data-stroke-ticks="true"
+                        data-highlights='[{"from": 200, "to": 250, "color": "rgba(255, 0, 0, .3)"}]'
+                        data-color-plate="#fff"
+                        data-color-major-ticks="#000"
+                        data-color-minor-ticks="#000"
+                        data-color-title="#000"
+                        data-color-units="#000"
+                        data-color-numbers="#000"
+                        data-color-needle-start="rgba(0,0,255,1)"
+                        data-color-needle-end="rgba(0,0,255,1)"
+                        data-value="0"
+                    ></canvas>
+                    <p id="voltmeter-reading">0 V</p>
+                </div>
+            </div>
+
+            <div class="controls">
+                <h3 id="analysis-title">Circuit Analysis to Determine Load Current (IL)</h3>
+                <p id="analysis-instruction">To get the load current select switches S1 to POWER and S2 to LOAD. And then click on SIMULATE.</p>
+                <div class="input-row">
+                    <label for="s1">Switch S1:</label>
+                    <select id="s1">
+                        <option value="power">Power</option>
+                        <option value="short">Short</option>
+                    </select>
+                    <label for="s2">Switch S2:</label>
+                    <select id="s2">
+                        <option value="load">Load</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="power">Power</option>
+                    </select>
+                </div>
+                <div class="input-row">
+                    <label for="v1">V1 (Volts):</label>
+                    <input type="number" id="v1" value="110" min="0" max="150">
+                    <label for="v2">V2 (Volts):</label>
+                    <input type="number" id="v2" value="220" min="0" max="300">
+                </div>
+                <div class="input-row">
+                    <label for="r1">R1 (Ohms):</label>
+                    <input type="number" id="r1" value="102" min="0" max="200">
+                    <label for="r2">R2 (Ohms):</label>
+                    <input type="number" id="r2" value="300" min="0" max="300">
+                </div>
+                <div class="input-row">
+                    <label for="r3">R3 (Ohms):</label>
+                    <input type="number" id="r3" value="200" min="0" max="200">
+                    <label for="rl">RL (Ohms):</label>
+                    <input type="number" id="rl" value="500" min="0" max="500">
+                </div>
+                <div class="simulate-btn-container">
+                    <button class="simulate-btn" onclick="simulate()">SIMULATE</button>
+                </div>
+                <div class="result" id="load-current">Load Current (IL): 0 A</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Observation Table Section -->
+    <div class="observation-section">
+        <h3>Observation Table</h3>
+        <table class="observation-table" id="observation-table">
+            <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Load Current from Case 1 (A)</th>
+                    <th>Load Voltage (V)</th>
+                    <th>Thevenin's Voltage from Case 2(a) (V)</th>
+                    <th>2nd Voltage Source for Case 2(b) (V)</th>
+                    <th>Ammeter Reading from Case 2(b) (A)</th>
+                    <th>Thevenin Resistance (Ω)</th>
+                    <th>Load Current (A)</th>
+                </tr>
+            </thead>
+            <tbody id="observation-tbody">
+                <tr>
+                    <td>1</td>
+                    <td class="il-case1">0.00</td>
+                    <td class="vl-case1">0.00</td>
+                    <td class="vth-case2a">0.00</td>
+                    <td class="v2-case2b">0.00</td>
+                    <td class="isc-case2b">0.00</td>
+                    <td class="rth-case2b">0.00</td>
+                    <td class="il-case3">0.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="il-case1">0.00</td>
+                    <td class="vl-case1">0.00</td>
+                    <td class="vth-case2a">0.00</td>
+                    <td class="v2-case2b">0.00</td>
+                    <td class="isc-case2b">0.00</td>
+                    <td class="rth-case2b">0.00</td>
+                    <td class="il-case3">0.00</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="il-case1">0.00</td>
+                    <td class="vl-case1">0.00</td>
+                    <td class="vth-case2a">0.00</td>
+                    <td class="v2-case2b">0.00</td>
+                    <td class="isc-case2b">0.00</td>
+                    <td class="rth-case2b">0.00</td>
+                    <td class="il-case3">0.00</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="il-case1">0.00</td>
+                    <td class="vl-case1">0.00</td>
+                    <td class="vth-case2a">0.00</td>
+                    <td class="v2-case2b">0.00</td>
+                    <td class="isc-case2b">0.00</td>
+                    <td class="rth-case2b">0.00</td>
+                    <td class="il-case3">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include Canvas Gauges Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-gauges/gauge.min.js"></script>
+
+    <script>
+        let vth = 0, rth = 0, il_case1 = 0, vl = 0, isc = 0;
+        let currentCase = 'case1';
+        let observationCount = 0;
+
+        // Initialize Canvas Gauges
+        const ammeterGauge = new RadialGauge({
+            renderTo: document.getElementById('ammeter'),
+            width: 200,
+            height: 200,
+            units: "Amps",
+            title: "Ammeter",
+            minValue: 0,
+            maxValue: 5,
+            majorTicks: [0, 1, 2, 3, 4, 5],
+            minorTicks: 5,
+            strokeTicks: true,
+            highlights: [{ from: 3, to: 5, color: "rgba(255, 0, 0, .3)" }],
+            colorPlate: "#fff",
+            colorMajorTicks: "#000",
+            colorMinorTicks: "#000",
+            colorTitle: "#000",
+            colorUnits: "#000",
+            colorNumbers: "#000",
+            colorNeedleStart: "rgba(255,0,0,1)",
+            colorNeedleEnd: "rgba(255,0,0,1)",
+            value: 0
+        }).draw();
+
+        const voltmeterGauge = new RadialGauge({
+            renderTo: document.getElementById('voltmeter'),
+            width: 200,
+            height: 200,
+            units: "Volts",
+            title: "Voltmeter",
+            minValue: 0,
+            maxValue: 250,
+            majorTicks: [0, 50, 100, 150, 200, 250],
+            minorTicks: 5,
+            strokeTicks: true,
+            highlights: [{ from: 200, to: 250, color: "rgba(255, 0, 0, .3)" }],
+            colorPlate: "#fff",
+            colorMajorTicks: "#000",
+            colorMinorTicks: "#000",
+            colorTitle: "#000",
+            colorUnits: "#000",
+            colorNumbers: "#000",
+            colorNeedleStart: "rgba(0,0,255,1)",
+            colorNeedleEnd: "rgba(0,0,255,1)",
+            value: 0
+        }).draw();
+
+        // Function to handle tab selection
+        function selectCase(caseName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${caseName}`).classList.add('active');
+
+            currentCase = caseName;
+            const s1 = document.getElementById('s1');
+            const s2 = document.getElementById('s2');
+            const analysisTitle = document.getElementById('analysis-title');
+            const analysisInstruction = document.getElementById('analysis-instruction');
+
+            switch (caseName) {
+                case 'case1':
+                    s1.value = 'power';
+                    s2.value = 'load';
+                    analysisTitle.innerText = 'Circuit Analysis to Determine Load Current (IL)';
+                    analysisInstruction.innerText = 'To get the load current select switches S1 to POWER and S2 to LOAD. And then click on SIMULATE.';
+                    break;
+                case 'case2a':
+                    s1.value = 'power';
+                    s2.value = 'intermediate';
+                    analysisTitle.innerText = 'Thevenin Voltage Analysis';
+                    analysisInstruction.innerText = 'To get the Thevenin voltage (Vth), select switches S1 to POWER and S2 to INTERMEDIATE. And then click on SIMULATE.';
+                    break;
+                case 'case2b':
+                    s1.value = 'short';
+                    s2.value = 'power';
+                    analysisTitle.innerText = 'Thevenin Resistance Analysis';
+                    analysisInstruction.innerText = 'To get the Thevenin resistance (Rth), select switches S1 to SHORT and S2 to POWER. And then click on SIMULATE.';
+                    break;
+                case 'case3':
+                    s1.value = 'power';
+                    s2.value = 'load';
+                    analysisTitle.innerText = 'Circuit Analysis to Determine Load Current (IL) using Vth and Rth';
+                    analysisInstruction.innerText = 'To get the load current using Vth and Rth, ensure Vth and Rth are calculated, then click on SIMULATE.';
+                    break;
+            }
+        }
+
+        // Function to format value: display as-is with 2 decimal places
+        function formatValue(value) {
+            return value.toFixed(2);
+        }
+
+        // Function to add a new observation to the table
+        function addObservation(ilCase1, vlCase1, vthCase2a, v2Case2b, iscCase2b, rthCase2b, ilCase3) {
+            const tbody = document.getElementById('observation-tbody');
+            const maxRows = 4;
+
+            if (observationCount >= maxRows) {
+                tbody.deleteRow(0);
+                for (let i = 0; i < tbody.rows.length; i++) {
+                    tbody.rows[i].cells[0].innerText = i + 1;
+                }
+            } else {
+                observationCount++;
+            }
+
+            const newRow = tbody.insertRow(-1);
+            newRow.innerHTML = `
+                <td>${tbody.rows.length}</td>
+                <td class="il-case1">${formatValue(ilCase1)}</td>
+                <td class="vl-case1">${formatValue(vlCase1)}</td>
+                <td class="vth-case2a">${formatValue(vthCase2a)}</td>
+                <td class="v2-case2b">${formatValue(v2Case2b)}</td>
+                <td class="isc-case2b">${formatValue(iscCase2b)}</td>
+                <td class="rth-case2b">${formatValue(rthCase2b)}</td>
+                <td class="il-case3">${formatValue(ilCase3)}</td>
+            `;
+        }
+
+        // Function to update gauges based on readings
+        function updateGauges(ammeterReading, voltmeterReading) {
+            ammeterGauge.value = ammeterReading;
+            voltmeterGauge.value = voltmeterReading;
+        }
+
+        // Simulate function
+        function simulate() {
+            const s1 = document.getElementById('s1').value;
+            const s2 = document.getElementById('s2').value;
+            const v1 = parseFloat(document.getElementById('v1').value);
+            const v2 = parseFloat(document.getElementById('v2').value);
+            const r1 = parseFloat(document.getElementById('r1').value);
+            const r2 = parseFloat(document.getElementById('r2').value);
+            const r3 = parseFloat(document.getElementById('r3').value);
+            const rl = parseFloat(document.getElementById('rl').value);
+
+            let ammeterReading = 0, voltmeterReading = 0;
+            let ilCase1 = il_case1, vlCase1 = vl, vthCase2a = vth, v2Case2b = v2, iscCase2b = isc, rthCase2b = rth, ilCase3 = 0;
+
+            if (currentCase === 'case1' && s1 === 'power' && s2 === 'load') {
+                const req1 = r1 + r3;
+                const req2 = (req1 * r2) / (req1 + r2);
+                const totalResistance = req2 + rl;
+                const totalVoltage = v1;
+                il_case1 = totalVoltage / totalResistance;
+                vl = il_case1 * rl;
+                document.getElementById('load-current').innerText = `Load Current (IL): ${il_case1.toFixed(2)} A`;
+
+                ammeterReading = il_case1;
+                voltmeterReading = vl;
+                ilCase1 = il_case1;
+                vlCase1 = vl;
+            }
+
+            if (currentCase === 'case2a' && s1 === 'power' && s2 === 'intermediate') {
+                const req1 = r1 + r3;
+                const current = v1 / (req1 + r2);
+                vth = current * r2;
+                document.getElementById('load-current').innerText = `Thevenin Voltage (Vth) from Case 2(a): ${vth.toFixed(2)} V`;
+
+                voltmeterReading = vth;
+                vthCase2a = vth;
+            }
+
+            if (currentCase === 'case2b' && s1 === 'short' && s2 === 'power') {
+                const req1 = (r1 * r3) / (r1 + r3);
+                rth = (req1 * r2) / (req1 + r2);
+                const vth_temp = vth || 0;
+                isc = vth_temp / rth;
+                document.getElementById('load-current').innerText = `Thevenin Resistance (Rth) from Case 2(b): ${rth.toFixed(2)} Ohms`;
+
+                ammeterReading = isc;
+                v2Case2b = v2;
+                iscCase2b = isc;
+                rthCase2b = rth;
+            }
+
+            if (currentCase === 'case3' && vth !== 0 && rth !== 0) {
+                const il_case3 = vth / (rth + rl);
+                document.getElementById('load-current').innerText = `Load Current (IL) using Vth and Rth: ${il_case3.toFixed(2)} A`;
+
+                ammeterReading = il_case3;
+                voltmeterReading = il_case3 * rl;
+                ilCase3 = il_case3;
+            }
+
+            // Update gauges
+            updateGauges(ammeterReading, voltmeterReading);
+
+            // Update text readings
+            document.getElementById('ammeter-reading').innerText = `${ammeterReading.toFixed(2)} A`;
+            document.getElementById('voltmeter-reading').innerText = `${voltmeterReading.toFixed(2)} V`;
+
+            // Add the observation to the table
+            addObservation(ilCase1, vlCase1, vthCase2a, v2Case2b, iscCase2b, rthCase2b, ilCase3);
+        }
+
+        // Initialize the default case (Case 1) on page load and run the first simulation
+        window.onload = function() {
+            selectCase('case1');
+            console.log("simulate function defined:", typeof simulate);
+            // Automatically run the simulation for Case 1 to populate Serial No. 1 with the first reading
+            simulate();
+        };
+    </script>
+</body>
+</html>
