@@ -1,4 +1,4 @@
-##  Procedure
+
 
 ###  Case 1: Measure Load Current in the Original Circuit
 1. Connect the circuit with all resistors (R₁, R₂, R₃, R<sub>L</sub>) and sources (V₁, V₂).
