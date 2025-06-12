@@ -90,7 +90,7 @@
 
   const myQuestions = [
     {
-      question: "1. Does Tellegen's Theorem apply to nonlinear circuits?:",  ///// Write the question inside double quotes
+      question 1: "In the experiment, what is the significance of setting S1 to Short in Case 2(b)?:",  ///// Write the question inside double quotes
       answers: {
         a: "short answer",                  ///// Write the option 1 inside double quotes
       },
